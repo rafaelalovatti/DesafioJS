@@ -15,7 +15,6 @@ senha.addEventListener("input", validarSenha);
 
 function validarNome() {
   const nomeValido = /^[A-Za-z\s]{6,}$/.test(nome.value.trim());
-
   nomeHelp.textContent = nomeValido
     ? ""
     : "Nome inválido. O nome deve conter pelo menos 6 caracteres, incluindo somente letras e espaços";
@@ -27,7 +26,6 @@ function validarAno() {
   const anoValido = /^(19[0-9]{2}|20[0-1][0-9]|202[0-4])$/.test(
     ano.value.trim()
   );
-
   anoHelp.textContent = anoValido
     ? ""
     : "Ano inválido. O ano deve estar entre 1900 e 2024.";
@@ -39,7 +37,6 @@ function validarEmail() {
   const emailValido = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.(com|br|net|org)$/.test(
     email.value.trim()
   );
-
   emailHelp.textContent = emailValido ? "" : "Formato de email inválido.";
   emailHelp.style.color = emailValido ? "" : "red";
   return emailValido;
