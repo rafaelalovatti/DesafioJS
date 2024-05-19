@@ -13,37 +13,40 @@ ano.addEventListener("focusout", validarAno);
 email.addEventListener("focusout", validarEmail);
 senha.addEventListener("input", validarSenha);
 
-function validarNome(e) {
-  const nomeValido = /^[A-Za-z\s]{6,}$/.test(e.target.value.trim());
+function validarNome() {
+  const nomeValido = /^[A-Za-z\s]{6,}$/.test(nome.value.trim());
 
   nomeHelp.textContent = nomeValido
     ? ""
     : "Nome inválido. O nome deve conter pelo menos 6 caracteres, incluindo somente letras e espaços";
   nomeHelp.style.color = nomeValido ? "" : "red";
+  return nomeValido;
 }
 
-function validarAno(e) {
+function validarAno() {
   const anoValido = /^(19[0-9]{2}|20[0-1][0-9]|202[0-4])$/.test(
-    e.target.value.trim()
+    ano.value.trim()
   );
 
   anoHelp.textContent = anoValido
     ? ""
     : "Ano inválido. O ano deve estar entre 1900 e 2024.";
   anoHelp.style.color = anoValido ? "" : "red";
+  return anoValido;
 }
 
-function validarEmail(e) {
+function validarEmail() {
   const emailValido = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.(com|br|net|org)$/.test(
-    e.target.value.trim()
+    email.value.trim()
   );
 
   emailHelp.textContent = emailValido ? "" : "Formato de email inválido.";
   emailHelp.style.color = emailValido ? "" : "red";
+  return emailValido;
 }
 
-function validarSenha(e) {
-  const senhaValue = e.target.value.trim();
+function validarSenha() {
+  const senhaValue = senha.value.trim();
   const nomeUsuario = nome.value
     .trim()
     .split(" ")
@@ -57,7 +60,7 @@ function validarSenha(e) {
       "Senha inválida. A senha deve conter entre 6 e 20 caracteres, letras, números e pelo menos um caractere especial.";
     senhaHelp.style.color = "red";
     passStrengthMeter.value = 0;
-    return;
+    return false;
   }
 
   if (
@@ -70,7 +73,7 @@ function validarSenha(e) {
       "A senha não pode conter o nome ou o ano de nascimento.";
     senhaHelp.style.color = "red";
     passStrengthMeter.value = 0;
-    return;
+    return false;
   }
 
   senhaHelp.textContent = `Senha ${nivelSeguranca}`;
@@ -82,6 +85,7 @@ function validarSenha(e) {
       : "green";
   passStrengthMeter.value =
     nivelSeguranca === "forte" ? 30 : nivelSeguranca === "moderada" ? 15 : 10;
+  return true;
 }
 
 function calcularNivelSegurancaSenha(senha) {
@@ -115,9 +119,21 @@ function calcularNivelSegurancaSenha(senha) {
 
 const form = document.querySelector("#singleForm");
 const successMessage = document.querySelector("#successMessage");
+const errorMessage = document.querySelector("#errorMessage");
 
 form.addEventListener("submit", function (event) {
   event.preventDefault();
-  successMessage.textContent = "Parabéns! Dados cadastrados com sucesso :)";
-  successMessage.style.display = "block";
+
+  const nomeValido = validarNome();
+  const anoValido = validarAno();
+  const emailValido = validarEmail();
+  const senhaValida = validarSenha();
+
+  if (nomeValido && anoValido && emailValido && senhaValida) {
+    successMessage.style.display = "block";
+    errorMessage.style.display = "none";
+  } else {
+    successMessage.style.display = "none";
+    errorMessage.style.display = "block";
+  }
 });

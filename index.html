@@ -5,8 +5,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="./css/bootstrap.min.css" rel="stylesheet">
-   
-    <script type="text/javascript" src="./js/validar.js" defer></script> 
+
+    <script type="text/javascript" src="./js/validar.js" defer></script>
     <title>Cadastro de Usuário</title>
 </head>
 
@@ -37,14 +37,15 @@
                         <div id="inputEmailHelp" class="form-text"></div>
                     </div>
                     <div class="mb-3">
-                        <label for="inputPassword" class="form-label">Senha_nivel</label>
+                        <label for="inputPassword" class="form-label">Senha</label>
                         <input type="password" class="form-control" id="inputPassword" required>
-                        <meter id="passStrengthMeter" low="11" high="21" min="0" max="30" optimum="30" value="0"
-                            style="width: 100%;"></meter>
+                        <meter id="passStrengthMeter" low="11" high="21" min="0" max="30" optimum="30" value="0" style="width: 100%;"></meter>
                         <div id="inputPasswordHelp" class="form-text"></div>
                         <div id="inputResult" class="form-text"></div>
                         <!-- Mensagem de sucesso -->
                         <div id="successMessage" class="form-text text-black" style="display: none; margin-top: 10px;">Parabéns! Dados cadastrados com sucesso :)</div>
+                        <!-- Mensagem de erro -->
+                        <div id="errorMessage" class="form-text text-danger" style="display: none; margin-top: 10px;">Dados inválidos. Usuário não cadastrado.</div>
                     </div>
                     <div class="mb-3 text-center">
                         <button type="submit" class="btn btn-primary">Enviar</button>
