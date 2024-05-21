@@ -1,136 +1,160 @@
-const nome = document.querySelector("#inputName");
-const nomeHelp = document.querySelector("#inputNameHelp");
-const ano = document.querySelector("#inputYear");
-const anoHelp = document.querySelector("#inputYearHelp");
-const email = document.querySelector("#inputEmail");
-const emailHelp = document.querySelector("#inputEmailHelp");
-const senha = document.querySelector("#inputPassword");
-const senhaHelp = document.querySelector("#inputPasswordHelp");
-const passStrengthMeter = document.querySelector("#passStrengthMeter");
+var nomeUsuario = document.querySelector("#inputName");
+var nomeAjuda = document.querySelector("#inputNameHelp");
+var anoNascimento = document.querySelector("#inputYear");
+var anoAjuda = document.querySelector("#inputYearHelp");
+var emailUsuario = document.querySelector("#inputEmail");
+var emailAjuda = document.querySelector("#inputEmailHelp");
+var senhaUsuario = document.querySelector("#inputPassword");
+var senhaAjuda = document.querySelector("#inputPasswordHelp");
+var medidorForcaSenha = document.querySelector("#passStrengthMeter");
 
-nome.addEventListener("focusout", validarNome);
-ano.addEventListener("focusout", validarAno);
-email.addEventListener("focusout", validarEmail);
-senha.addEventListener("input", validarSenha);
+nomeUsuario.addEventListener("focusout", checarNome);
+anoNascimento.addEventListener("focusout", checarAno);
+emailUsuario.addEventListener("focusout", checarEmail);
+senhaUsuario.addEventListener("input", checarSenha);
 
-function validarNome() {
-  const nomeValido = /^[A-Za-z\s]{6,}$/.test(nome.value.trim());
-  nomeHelp.textContent = nomeValido
-    ? ""
-    : "Nome inválido. O nome deve conter pelo menos 6 caracteres, incluindo somente letras e espaços";
-  nomeHelp.style.color = nomeValido ? "" : "red";
+function checarNome() {
+  const padraoNome = /^[A-Za-z]+\s+[A-Za-z\s]*$/;
+  const nomeValido = padraoNome.test(nomeUsuario.value.trim());
+
+  if (!nomeValido) {
+    nomeAjuda.textContent =
+      "Nome inválido. Deve conter somente letras e espaços, e ter no mínimo 6 caracteres.";
+    nomeAjuda.style.color = "red";
+  } else {
+    nomeAjuda.textContent = "";
+  }
   return nomeValido;
 }
 
-function validarAno() {
-  const anoValido = /^(19[0-9]{2}|20[0-1][0-9]|202[0-4])$/.test(
-    ano.value.trim()
-  );
-  anoHelp.textContent = anoValido
-    ? ""
-    : "Ano inválido. O ano deve estar entre 1900 e 2024.";
-  anoHelp.style.color = anoValido ? "" : "red";
+function checarAno() {
+  const padraoAno = /^(19[0-9]{2}|20[0-1][0-9]|202[0-4])$/;
+  const anoValido = padraoAno.test(anoNascimento.value.trim());
+
+  if (!anoValido) {
+    anoAjuda.textContent = "Ano inválido. Deve estar entre 1900 e 2024.";
+    anoAjuda.style.color = "red";
+  } else {
+    anoAjuda.textContent = "";
+  }
   return anoValido;
 }
 
-function validarEmail() {
-  const emailValido = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.(com|br|net|org)$/.test(
-    email.value.trim()
-  );
-  emailHelp.textContent = emailValido ? "" : "Formato de email inválido.";
-  emailHelp.style.color = emailValido ? "" : "red";
+function checarEmail() {
+  const padraoEmail = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.(com|br|net|org)$/;
+  const emailValido = padraoEmail.test(emailUsuario.value.trim());
+
+  if (!emailValido) {
+    emailAjuda.textContent = "Formato de email inválido.";
+    emailAjuda.style.color = "red";
+  } else {
+    emailAjuda.textContent = "";
+  }
   return emailValido;
 }
 
-function validarSenha() {
-  const senhaValue = senha.value.trim();
-  const nomeUsuario = nome.value
+function checarSenha() {
+  const padraoSenha = /^(?=.[!@#$%^&(),.?":{}|<>])(?=.\d)(?=.[a-zA-Z]).{6,20}$/;
+  const valorSenha = senhaUsuario.value;
+  let senhaValida = padraoSenha.test(valorSenha);
+
+  if (!senhaValida) {
+    senhaAjuda.textContent =
+      "Senha inválida. A senha deve conter 6 a 20 caracteres. Pelo menos, um caractere especial, números e letras.";
+    senhaAjuda.style.color = "red";
+    medidorForcaSenha.value = 0;
+    return false;
+  }
+
+  const partesNomeUsuario = nomeUsuario.value
     .trim()
     .split(" ")
     .slice(0, 2)
-    .map((nome) => nome.toLowerCase());
-  const anoNascimento = ano.value.trim();
-  const nivelSeguranca = calcularNivelSegurancaSenha(senhaValue);
-
-  if (!nivelSeguranca) {
-    senhaHelp.textContent =
-      "Senha inválida. A senha deve conter entre 6 e 20 caracteres, letras, números e pelo menos um caractere especial.";
-    senhaHelp.style.color = "red";
-    passStrengthMeter.value = 0;
-    return false;
-  }
+    .map((parteNome) => parteNome.toLowerCase());
+  const anoVal = anoNascimento.value.trim();
 
   if (
-    nomeUsuario.some((nomeParte) =>
-      senhaValue.toLowerCase().includes(nomeParte)
+    partesNomeUsuario.length > 0 &&
+    partesNomeUsuario[0] !== "" &&
+    (partesNomeUsuario.some((parte) =>
+      valorSenha.toLowerCase().includes(parte)
     ) ||
-    senhaValue.includes(anoNascimento)
+      (anoVal && valorSenha.includes(anoVal)))
   ) {
-    senhaHelp.textContent =
-      "A senha não pode conter o nome ou o ano de nascimento.";
-    senhaHelp.style.color = "red";
-    passStrengthMeter.value = 0;
+    senhaAjuda.textContent = "Senha não pode conter nome ou ano de nascimento";
+    senhaAjuda.style.color = "red";
+    medidorForcaSenha.value = 0;
     return false;
   }
 
-  senhaHelp.textContent = `Senha ${nivelSeguranca}`;
-  senhaHelp.style.color =
-    nivelSeguranca === "fraca"
-      ? "red"
-      : nivelSeguranca === "moderada"
-      ? "orange"
-      : "green";
-  passStrengthMeter.value =
-    nivelSeguranca === "forte" ? 30 : nivelSeguranca === "moderada" ? 15 : 10;
-  return true;
-}
-
-function calcularNivelSegurancaSenha(senha) {
-  const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/.test(senha);
-  const hasNumber = /\d/.test(senha);
-  const hasUpperCase = /[A-Z]/.test(senha);
-
-  if (senha.length >= 6 && senha.length <= 8 && hasSpecialChar && hasNumber) {
-    return "fraca";
-  } else if (
-    senha.length > 8 &&
-    senha.length <= 12 &&
-    hasSpecialChar &&
-    hasNumber &&
-    hasUpperCase
-  ) {
-    return "moderada";
-  } else if (
-    senha.length > 12 &&
-    hasSpecialChar &&
-    hasNumber &&
-    hasUpperCase &&
-    senha.match(/[!@#$%^&*(),.?":{}|<>]/g).length > 1 &&
-    senha.match(/\d/g).length > 1 &&
-    senha.match(/[A-Z]/g).length > 1
-  ) {
-    return "forte";
+  const nivelForca = calcularForcaSenha(valorSenha);
+  if (nivelForca === "fraca") {
+    senhaAjuda.textContent = "Senha fraca";
+    senhaAjuda.style.color = "red";
+    medidorForcaSenha.value = 10;
+    senhaValida = true;
+  } else if (nivelForca === "moderada") {
+    senhaAjuda.textContent = "Senha moderada";
+    senhaAjuda.style.color = "orange";
+    medidorForcaSenha.value = 20;
+    senhaValida = true;
+  } else if (nivelForca === "forte") {
+    senhaAjuda.textContent = "Senha forte";
+    senhaAjuda.style.color = "green";
+    medidorForcaSenha.value = 30;
+    senhaValida = true;
   }
-  return null;
+
+  return senhaValida;
 }
 
-const form = document.querySelector("#singleForm");
-const successMessage = document.querySelector("#successMessage");
-const errorMessage = document.querySelector("#errorMessage");
+function calcularForcaSenha(senha) {
+  const contemCharEspecial = /[!@#$%^&*(),.?":{}|<>]/.test(senha);
+  const contemNumero = /\d/.test(senha);
+  const contemMaiuscula = /[A-Z]/.test(senha);
 
-form.addEventListener("submit", function (event) {
-  event.preventDefault();
+  if (contemCharEspecial && contemNumero && contemMaiuscula) {
+    const quantidadeCharEspeciais = (
+      senha.match(/[!@#$%^&*(),.?":{}|<>]/g) || []
+    ).length;
+    const quantidadeNumeros = (senha.match(/\d/g) || []).length;
+    const quantidadeMaiusculas = (senha.match(/[A-Z]/g) || []).length;
 
-  const nomeValido = validarNome();
-  const anoValido = validarAno();
-  const emailValido = validarEmail();
-  const senhaValida = validarSenha();
-
-  if (nomeValido && anoValido && emailValido && senhaValida) {
-    successMessage.style.display = "block";
-    errorMessage.style.display = "none";
+    if (
+      senha.length > 12 &&
+      quantidadeCharEspeciais > 1 &&
+      quantidadeNumeros > 1 &&
+      quantidadeMaiusculas > 1
+    ) {
+      return "forte";
+    } else if (senha.length >= 8) {
+      return "moderada";
+    } else {
+      return "fraca";
+    }
   } else {
-    successMessage.style.display = "none";
-    errorMessage.style.display = "block";
+    return "fraca";
   }
-});
+}
+
+document
+  .querySelector("#singleForm")
+  .addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    const nomeValido = checarNome();
+    const anoValido = checarAno();
+    const emailValido = checarEmail();
+    const senhaValida = checarSenha();
+
+    const resultadoDiv = document.getElementById("inputResult");
+
+    if (nomeValido && anoValido && emailValido && senhaValida) {
+      resultadoDiv.textContent = "Usuário cadastrado com sucesso!";
+      resultadoDiv.style.color = "green";
+    } else {
+      resultadoDiv.textContent =
+        "Cadastro inválido. Por favor, corrija os campos destacados.";
+      resultadoDiv.style.color = "red";
+    }
+  });
