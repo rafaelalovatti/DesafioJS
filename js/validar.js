@@ -32,7 +32,7 @@ function checarAno() {
   const anoValido = padraoAno.test(anoNascimento.value.trim());
 
   if (!anoValido) {
-    anoAjuda.textContent = "Ano inválido. Deve estar entre 1900 e 2024.";
+    anoAjuda.textContent = "Ano inválido. Por favor, insira um ano entre 1900 e 2024.";
     anoAjuda.style.color = "red";
   } else {
     anoAjuda.textContent = "";
@@ -60,7 +60,7 @@ function checarSenha() {
 
   if (!senhaValida) {
     senhaAjuda.textContent =
-      "Senha inválida. A senha deve conter 6 a 20 caracteres. Pelo menos, um caractere especial, números e letras.";
+      "Senha inválida. Por favor, utilize de 6 a 20 caracteres, números, letras e, ao menos, um caractere especial.";
     senhaAjuda.style.color = "red";
     medidorForcaSenha.value = 0;
     return false;
@@ -81,7 +81,7 @@ function checarSenha() {
     ) ||
       (anoVal && valorSenha.includes(anoVal)))
   ) {
-    senhaAjuda.textContent = "Senha não pode conter nome ou ano de nascimento";
+    senhaAjuda.textContent = "A senha não pode conter nome ou ano de nascimento!";
     senhaAjuda.style.color = "red";
     medidorForcaSenha.value = 0;
     return false;
@@ -150,11 +150,11 @@ document
     const resultadoDiv = document.getElementById("inputResult");
 
     if (nomeValido && anoValido && emailValido && senhaValida) {
-      resultadoDiv.textContent = "Usuário cadastrado com sucesso!";
+      resultadoDiv.textContent = "Parabéns! Seus dados foram cadastrados!";
       resultadoDiv.style.color = "green";
     } else {
       resultadoDiv.textContent =
-        "Cadastro inválido. Por favor, corrija os campos destacados.";
+        "Dados inválidos! Cadastro não realizado.";
       resultadoDiv.style.color = "red";
     }
   });
