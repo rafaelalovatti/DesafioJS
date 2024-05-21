@@ -14,12 +14,12 @@ email.addEventListener("focusout", validarEmail);
 senha.addEventListener("input", validarSenha);
 
 function validarNome() {
-  const regexNome = /^[A-Za-z\s]{6,20}$/;
+  const regexNome = /^[A-Za-z\s]{6,}$/;
   const nomeValido = regexNome.test(nome.value.trim());
 
   if (!nomeValido) {
     nomeHelp.textContent =
-      "Nome inválido. Por favor, insira no mínimo 6 caracteres, somente letras e espaços.";
+      "Nome inválido. Por favor, insira no mínimo 6 caracteres, somente letras e espaços, e ter, ao menos, um caractere especial. ";
     nomeHelp.style.color = "red";
   } else {
     nomeHelp.textContent = "";
