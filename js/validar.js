@@ -19,7 +19,7 @@ function validarNome() {
 
   if (!nomeValido) {
     nomeHelp.textContent =
-      "Nome inválido. Por favor, insira no mínimo 6 caracteres, somente letras e espaços, e ter, ao menos, um caractere especial. ";
+      "Nome inválido. Por favor, insira no mínimo 6 caracteres, somente letras e espaços, e ter, ao menos, um caractere especial.";
     nomeHelp.style.color = "red";
   } else {
     nomeHelp.textContent = "";
